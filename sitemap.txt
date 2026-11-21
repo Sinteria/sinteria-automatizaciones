@@ -1,7 +1,7 @@
-https://sinteria.github.io/
-https://sinteria.github.io/sistema-personalizado.html
-https://sinteria.github.io/pagina-web-personalizada.html
-https://sinteria.github.io/sistema-inventarios-google-sheets.html
-https://sinteria.github.io/automatizacion-google-sheets-apps-script.html
-https://sinteria.github.io/sistema-compras-requerimientos.html
-https://sinteria.github.io/sistema-prestamos-pagos.html
+https://sinteriagroup.com/
+https://sinteriagroup.com/sistema-personalizado.html
+https://sinteriagroup.com/pagina-web-personalizada.html
+https://sinteriagroup.com/sistema-inventarios-google-sheets.html
+https://sinteriagroup.com/automatizacion-google-sheets-apps-script.html
+https://sinteriagroup.com/sistema-compras-requerimientos.html
+https://sinteriagroup.com/sistema-prestamos-pagos.html
