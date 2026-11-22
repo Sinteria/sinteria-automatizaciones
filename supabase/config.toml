@@ -1,0 +1,5 @@
+project_id = "sinteria-automatizaciones"
+
+[functions.sinteria-content]
+# The media route is public. The editor route authenticates each request with Supabase Auth.
+verify_jwt = false
