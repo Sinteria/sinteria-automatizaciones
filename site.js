@@ -97,7 +97,7 @@
   links.forEach((link) => link.addEventListener('click', (event) => {
     event.preventDefault();
     opener = link;
-    group = links.filter((candidate) => candidate.dataset.gallery === link.dataset.gallery);
+    group = links.filter((candidate) => candidate.dataset.gallery === link.dataset.gallery && !candidate.closest('[hidden]'));
     displayImage(group.indexOf(link));
     dialog.showModal();
     document.body.classList.add('gallery-open');

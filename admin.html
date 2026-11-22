@@ -8,8 +8,8 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' blob: https://pdnalhyhgorcaiosrjsr.supabase.co; connect-src 'self' https://pdnalhyhgorcaiosrjsr.supabase.co; object-src 'none'; base-uri 'none'; form-action 'none'">
   <title>Panel administrativo | Sinteria Automatizaciones</title>
   <link rel="icon" href="/favicon.ico">
-  <link rel="stylesheet" href="/sinteria-admin.css">
-  <script type="module" src="/sinteria-admin.js"></script>
+  <link rel="stylesheet" href="/sinteria-admin.css?v=2">
+  <script type="module" src="/sinteria-admin.js?v=2"></script>
 </head>
 <body>
   <header class="topbar">
@@ -37,66 +37,112 @@
 
     <section id="workspace" hidden>
       <div class="heading">
-        <h1>Contenido de la web</h1>
-        <a class="quiet" id="open-page" href="/" target="_blank" rel="noopener">Ver página ↗</a>
+        <h1>Administrar la web</h1>
+        <a class="quiet" href="/" target="_blank" rel="noopener">Ver sitio ↗</a>
       </div>
+      <nav class="admin-nav" aria-label="Herramientas del panel">
+        <button type="button" data-view="content" aria-controls="view-content" aria-pressed="true">Contenido</button>
+        <button type="button" data-view="catalogs" aria-controls="view-catalogs" aria-pressed="false">Catálogos</button>
+        <button type="button" data-view="contacts" aria-controls="view-contacts" aria-pressed="false">Contacto</button>
+        <button type="button" data-view="stats" aria-controls="view-stats" aria-pressed="false">Estadísticas</button>
+      </nav>
 
-      <div class="workspace">
-        <aside class="panel sidebar" aria-label="Seleccionar contenido">
-          <label for="page">Página</label>
-          <select id="page"></select>
-          <div id="filters" class="filters" role="group" aria-label="Tipo de contenido">
-            <button type="button" data-kind="text">Textos</button>
-            <button type="button" data-kind="image">Fotos</button>
-            <button type="button" data-kind="price">Precios</button>
-          </div>
-          <label class="visually-hidden" for="field-search">Buscar contenido</label>
-          <input id="field-search" type="search" placeholder="Buscar en esta página">
-          <ul id="fields" class="fields"></ul>
+      <section id="view-content" class="workspace" aria-label="Contenido por sección">
+        <aside class="panel sidebar">
+          <label for="page">Página</label><select id="page"></select>
+          <label for="block-search">Buscar una sección o tarjeta</label>
+          <input id="block-search" type="search" placeholder="Ej. Construimos y revisamos">
+          <div id="block-list" class="block-list"></div>
         </aside>
-
-        <section class="panel details" aria-labelledby="field-title">
-          <p id="empty" hidden>No hay contenido para esta búsqueda.</p>
-          <form id="editor">
+        <section class="panel details" id="block-editor" aria-label="Editar tarjeta">
+          <p id="empty-block">Elige una tarjeta para editarla.</p>
+          <form id="block-form" hidden>
             <div class="editor-heading">
-              <p id="field-section" class="muted"></p>
-              <h2 id="field-title"></h2>
+              <p id="block-location" class="muted"></p>
+              <h2 id="block-heading" tabindex="-1"></h2>
+              <a class="quiet" id="open-block" href="/" target="_blank" rel="noopener">Ver en la web ↗</a>
             </div>
-
-            <div id="edit-text" class="control" hidden>
-              <label for="text-value">Texto de la página</label>
-              <textarea id="text-value" rows="7"></textarea>
-            </div>
-
-            <div id="edit-image" class="control" hidden>
-              <img id="image-preview" class="image-preview" alt="">
-              <label for="photo">Reemplazar foto</label>
-              <input id="photo" type="file" accept="image/jpeg,image/png,image/webp">
-              <p class="hint">JPG, PNG o WebP. El panel optimiza la foto a un máximo de 1 600 píxeles por lado y 512 KiB. La biblioteca admite hasta 20 MiB.</p>
-              <label for="photo-alt">Descripción de la foto</label>
-              <input id="photo-alt" maxlength="200">
-            </div>
-
-            <div id="edit-price" class="control" hidden>
-              <label for="price-value">Monto en soles</label>
-              <div class="price-input">
-                <span aria-hidden="true">S/</span>
-                <input id="price-value" type="text" inputmode="decimal" maxlength="10" placeholder="0.00">
-              </div>
-              <label class="check"><input id="price-visible" type="checkbox"> Mostrar precio en la web</label>
-              <p class="hint">Puedes guardar el monto con el precio oculto y mostrarlo cuando lo necesites.</p>
-            </div>
-
-            <div class="actions">
-              <button class="primary" id="publish" type="submit">Guardar y publicar</button>
-              <button class="quiet" id="restore" type="button" hidden>Restaurar original</button>
-            </div>
-            <p id="editor-status" class="status" role="status"></p>
+            <div id="block-fields" class="record"></div>
+            <label id="block-visible-label" class="check" hidden><input id="block-visible" type="checkbox"> Mostrar esta tarjeta completa en la web</label>
+            <div class="actions"><button class="primary" type="submit">Guardar y publicar</button></div>
+            <p id="block-status" class="status" role="status"></p>
           </form>
         </section>
-      </div>
+      </section>
+
+      <section id="view-catalogs" class="workspace" aria-label="Catálogos" hidden>
+        <aside class="panel sidebar">
+          <h2>Catálogos</h2>
+          <p id="catalog-count" class="hint"></p>
+          <button class="primary" id="new-catalog" type="button">Crear catálogo</button>
+          <div id="catalog-list" class="block-list"></div>
+        </aside>
+        <section class="panel details" id="catalog-editor" aria-label="Editar catálogo">
+          <form id="catalog-form" class="record">
+            <h2 id="catalog-heading" tabindex="-1">Nuevo catálogo</h2>
+            <label>Título<input name="title" maxlength="120" required></label>
+            <label>Descripción<textarea name="description" maxlength="1600" rows="3"></textarea></label>
+            <label>Página donde aparecerá<select name="page"></select></label>
+            <label class="check"><input type="checkbox" name="published"> Mostrar catálogo en la web</label>
+            <p id="photo-usage" class="hint"></p>
+            <div id="catalog-photos" class="catalog-photos"></div>
+            <div class="actions">
+              <button class="primary" type="submit">Guardar catálogo</button>
+              <button class="quiet danger" id="delete-catalog" type="button" hidden>Borrar catálogo</button>
+            </div>
+            <p id="catalog-status" class="status" role="status"></p>
+          </form>
+        </section>
+      </section>
+
+      <section id="view-contacts" class="panel details single" aria-labelledby="contacts-heading" hidden>
+        <h2 id="contacts-heading">Contacto y redes sociales</h2>
+        <form id="contacts-form" class="record">
+          <label>WhatsApp comercial<input name="whatsapp" inputmode="tel" maxlength="20" required></label>
+          <label>Correo público<input name="email" type="email" maxlength="254" required></label>
+          <label>Facebook<input name="facebook" type="url" maxlength="400"></label>
+          <label>Instagram<input name="instagram" type="url" maxlength="400"></label>
+          <label>TikTok<input name="tiktok" type="url" maxlength="400"></label>
+          <label>Titular o razón social pública<input name="business_name" maxlength="160"></label>
+          <label>Domicilio público para solicitudes de privacidad<input name="business_address" maxlength="240"></label>
+          <label>Enlace al Libro de Reclamaciones virtual<input name="complaints_url" type="url" maxlength="400"></label>
+          <p class="hint">Mientras ese enlace esté vacío, el pie de página permitirá solicitar el Libro por WhatsApp.</p>
+          <div class="actions"><button class="primary" type="submit">Guardar y publicar contacto</button></div>
+          <p id="contacts-status" class="status" role="status"></p>
+        </form>
+      </section>
+
+      <section id="view-stats" class="panel details" aria-labelledby="stats-heading" hidden>
+        <div class="stats-header">
+          <h2 id="stats-heading">Actividad de la web</h2>
+          <label>Periodo <select id="stats-days"><option value="7">Últimos 7 días</option><option value="30" selected>Últimos 30 días</option></select></label>
+        </div>
+        <div class="stats-cards">
+          <div><span>Visitas</span><strong id="visits-total">—</strong></div>
+          <div><span>Clics en WhatsApp</span><strong id="clicks-total">—</strong></div>
+          <div><span>Servicio con más clics</span><strong id="top-service">—</strong></div>
+        </div>
+        <p class="hint">Solo se cuenta la actividad de visitantes que aceptan estadísticas. Las visitas son cargas de página y los clics cuentan pulsaciones del enlace.</p>
+        <table class="stats-table">
+          <thead><tr><th scope="col">Página o servicio</th><th scope="col">Visitas</th><th scope="col">WhatsApp</th></tr></thead>
+          <tbody id="stats-table"></tbody>
+        </table>
+        <p id="stats-status" class="status" role="status"></p>
+      </section>
     </section>
     <noscript>Activa JavaScript para ingresar al panel.</noscript>
   </main>
+  <template id="photo-template">
+    <fieldset class="photo-control">
+      <legend></legend>
+      <img alt="" class="edit-photo" hidden>
+      <label>Acción de la foto<select data-photo-mode></select></label>
+      <div class="record" data-upload-fields hidden>
+        <label>Elige la foto<input type="file" accept="image/jpeg,image/png,image/webp"></label>
+        <label>Texto alternativo<input data-alt maxlength="200"></label>
+        <p class="hint">JPG, PNG o WebP. Hasta 512 KiB y 1 600 px por lado después de optimizar.</p>
+      </div>
+    </fieldset>
+  </template>
 </body>
 </html>
