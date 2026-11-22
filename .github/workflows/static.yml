@@ -28,7 +28,7 @@ jobs:
       - name: Preparar la web
         run: |
           mkdir -p "$RUNNER_TEMP/sinteria-pages"
-          rsync -a --exclude=/.git/ --exclude=/.github/ --exclude=/inventarios/ ./ "$RUNNER_TEMP/sinteria-pages/"
+          rsync -a --exclude=/.git/ --exclude=/.github/ --exclude=/inventarios/ --exclude=/supabase/ ./ "$RUNNER_TEMP/sinteria-pages/"
       - name: Empaquetar la web
         uses: actions/upload-pages-artifact@v4
         with:
